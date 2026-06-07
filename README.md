@@ -115,25 +115,25 @@ npm run dev
 
 ### 🏠 Home Page
 
-<img src="screenshots/home.png" width="900"/>
+<img src="Screenshots/home.png" width="900"/>
 
 ---
 
 ### 🔍 Product Detection
 
-<img src="screenshots/detection.png" width="900"/>
+<img src="Screenshots/detection.png" width="900"/>
 
 ---
 
 ### 🧾 Generated Bill
 
-<img src="screenshots/bill.png" width="900"/>
+<img src="Screenshots/bill.png" width="900"/>
 
 ---
 
 ### 📄 PDF Bill
 
-<img src="screenshots/pdf_bill.png" width="900"/>
+<img src="Screenshots/pdf_bill.png" width="900"/>
 
 ---
 
