@@ -1,170 +1,187 @@
-# 🛒 Smart Retail Checkout System
+# Smart Retail Checkout
 
-An AI-powered Smart Retail Checkout System that automatically detects grocery products from uploaded images using YOLO and generates bills instantly, reducing checkout time and minimizing manual effort.
+An AI-powered checkout application that detects grocery products from uploaded images and automatically generates a combined bill.
 
----
+The project uses a custom YOLO model for product detection, FastAPI for inference and billing, and React for the checkout interface.
 
-## 🚀 Project Overview
+![Smart Retail Checkout home screen](Screenshots/home.png)
 
-Traditional retail billing requires manual scanning of each product, resulting in long queues and increased human effort.
+## Highlights
 
-This project leverages Computer Vision and Deep Learning to automatically identify products from images and generate a bill, providing a faster and smarter checkout experience.
+- Upload one or multiple grocery images
+- Detect products using a custom YOLO model
+- Adjust the detection confidence threshold
+- Combine duplicate products across images
+- Calculate item totals, 5% GST, and the final amount
+- Print the generated bill directly from the browser
+- Use the responsive interface on desktop and mobile screens
 
----
+## How it works
 
-## ✨ Features
+1. The shopper uploads one or more product images.
+2. The frontend sends each image to the FastAPI detection endpoint.
+3. YOLO identifies products and returns their labels and confidence scores.
+4. The application combines detected items, looks up their prices, and generates one bill.
 
-- 🔍 Automatic grocery item detection using YOLO
-- 📸 Support for multiple image uploads
-- 🧾 Automatic bill generation
-- 💰 Price calculation for detected products
-- ⚡ FastAPI backend for fast inference
-- 🎨 Modern React frontend
-- 📊 Adjustable confidence threshold
-- 🛍️ Combined billing from multiple images
-- 📱 Responsive user interface
+## Tech stack
 
----
+| Layer | Technology |
+| --- | --- |
+| Frontend | React 19, Vite, Axios, CSS |
+| Backend | FastAPI, Uvicorn, Python |
+| AI/ML | Ultralytics YOLO, PyTorch, Pillow |
+| Billing | Python price map with 5% GST |
 
-## 🛠️ Tech Stack
-
-### Backend
-
-- Python
-- FastAPI
-- Ultralytics YOLO
-- OpenCV
-- NumPy
-
-### Frontend
-
-- React
-- Vite
-- JavaScript
-- CSS
-
----
-
-## 📂 Project Structure
+## Project structure
 
 ```text
 SmartRetailCheckout/
-
-├── backend/
-│   ├── main.py
-│   ├── prices.py
-│   └── requirements.txt
-│
-├── frontend/
-│   ├── src/
-│   ├── public/
-│   ├── package.json
-│   └── vite.config.js
-│
-├── .gitignore
-└── README.md
+|-- backend/
+|   |-- best.pt              # Trained YOLO weights (not tracked by Git)
+|   |-- main.py              # API and inference logic
+|   |-- prices.py            # Product prices and GST rate
+|   `-- requirements.txt
+|-- frontend/
+|   |-- public/
+|   |-- src/
+|   |   |-- App.jsx
+|   |   |-- App.css
+|   |   `-- main.jsx
+|   |-- package.json
+|   `-- vite.config.js
+|-- Screenshots/
+`-- README.md
 ```
 
----
+## Prerequisites
 
-## ⚙️ Installation
+Install the following before starting:
 
-### Clone the repository
+- Python 3.10 or newer
+- Node.js 20 or newer
+- npm
+- A trained YOLO weights file named `best.pt`
 
-```bash
+> `backend/best.pt` is required at runtime and is intentionally excluded from Git because model files are usually large.
+
+## Quick start
+
+### 1. Clone the repository
+
+```powershell
 git clone https://github.com/hitesh-2005/Smart_Retail_Checkout_System.git
+cd Smart_Retail_Checkout_System
 ```
 
-### Backend Setup
+Place your trained model at:
 
-```bash
+```text
+backend/best.pt
+```
+
+### 2. Start the backend
+
+Run these commands in the first PowerShell terminal:
+
+```powershell
 cd backend
-
 python -m venv venv
-
-venv\Scripts\activate
-
-pip install -r requirements.txt
-
-uvicorn main:app --reload
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+.\venv\Scripts\python.exe -m uvicorn main:app --reload --port 8000
 ```
 
-### Frontend Setup
+The API will be available at `http://localhost:8000`.
 
-```bash
+Useful backend pages:
+
+- Health check: `http://localhost:8000/health`
+- Interactive API documentation: `http://localhost:8000/docs`
+
+### 3. Start the frontend
+
+Open a second PowerShell terminal:
+
+```powershell
 cd frontend
-
 npm install
-
 npm run dev
 ```
 
----
+Open the URL printed by Vite, normally `http://localhost:5173`.
 
-## 🎯 How It Works
+## API endpoints
 
-1. Upload one or more grocery images.
-2. The YOLO model detects products.
-3. Detected products are matched with their prices.
-4. A bill is generated automatically.
-5. The total amount is calculated and displayed.
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/` | API status and model availability |
+| `GET` | `/health` | Backend and model health check |
+| `GET` | `/classes` | List classes supported by the loaded model |
+| `POST` | `/detect` | Detect products in an uploaded image and generate bill data |
 
----
+The `/detect` endpoint accepts:
 
-## 📸 Screenshots
+- `file`: an uploaded image
+- `confidence`: a value between `0.10` and `0.90` (default: `0.60`)
 
-### 🏠 Home Page
+## Quality checks
 
-<img src="Screenshots/home.png" width="700"/>
+Run the frontend checks before committing changes:
 
----
+```powershell
+cd frontend
+npm run lint
+npm run build
+```
 
-### 🔍 Product Detection
+## Screenshots
 
-<img src="Screenshots/detection.png" width="700"/>
+### Product detection
 
----
+![Detected grocery products with confidence scores](Screenshots/detection.png)
 
-### 🧾 Generated Bill
+### Generated bill
 
-<img src="Screenshots/bill.png" width="700"/>
+![Generated smart retail bill](Screenshots/bill.png)
 
----
+### Printable bill
 
-### 📄 PDF Bill
+![Printable bill view](Screenshots/pdf_bill.png)
 
-<img src="Screenshots/pdf_bill.png" width="700"/>
+## Configuration
 
----
+- Frontend API URL: `frontend/src/App.jsx`
+- Model location: `backend/best.pt`
+- Product prices and GST: `backend/prices.py`
+- Allowed frontend origins: `backend/main.py`
 
-## 🔮 Future Enhancements
+If you change the backend port, update `API_URL` in `frontend/src/App.jsx` as well.
 
-- 📷 Real-time webcam checkout
-- 🏷️ Barcode and QR code integration
-- 📄 PDF bill generation
-- ☁️ Cloud deployment
-- 📦 Inventory management
-- 💳 Online payment gateway integration
-- 📊 Sales analytics dashboard
-- 🤖 Improved model accuracy with larger datasets
+## Troubleshooting
 
----
+### The backend reports `Model not loaded`
 
-## 🎓 Learning Outcomes
+Confirm that the model exists at `backend/best.pt` and restart the backend.
 
-- Object Detection using YOLO
-- FastAPI backend development
-- React frontend development
-- REST API integration
-- Image processing techniques
-- Full-stack AI application development
+### The frontend reports `Detection failed`
 
----
+Make sure the FastAPI server is running on port `8000`, then check `http://localhost:8000/health`.
 
-## 👨‍💻 Author
+### PowerShell blocks virtual environment activation
 
-**Hitesh Gupta**
+The commands above call the virtual environment's Python executable directly, so activation is not required.
 
-Machine Learning & AI Enthusiast
+### Installation is slow
 
----
+PyTorch and Ultralytics are large dependencies. The first backend installation can take several minutes depending on the system and connection.
+
+## Future improvements
+
+- Real-time webcam detection
+- Inventory management
+- Barcode and QR support
+- Persistent sales history and analytics
+- Digital payments
+
+## Author
+
+Built by [Hitesh Gupta](https://github.com/hitesh-2005).

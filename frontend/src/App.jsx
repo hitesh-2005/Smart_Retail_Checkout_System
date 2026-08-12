@@ -161,6 +161,7 @@ export default function App() {
 
       <main className="main">
         <div className="page-title">
+          <span className="eyebrow">AI-assisted checkout</span>
           <h2>Scan & Checkout</h2>
           <p>Upload one or multiple grocery images — all items will be detected and combined into a single bill</p>
         </div>
@@ -185,9 +186,18 @@ export default function App() {
               <div
                 className={`dropzone ${dragOver ? "drag-active" : ""}`}
                 onClick={() => fileRef.current.click()}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    fileRef.current.click();
+                  }
+                }}
                 onDrop={handleDrop}
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                 onDragLeave={() => setDragOver(false)}
+                role="button"
+                tabIndex={0}
+                aria-label="Upload grocery images"
               >
                 <div className="drop-content">
                   <div className="drop-icon">
@@ -221,6 +231,7 @@ export default function App() {
                         className="thumb-remove"
                         onClick={() => removeImage(img.id)}
                         title="Remove"
+                        aria-label={`Remove image ${i + 1}`}
                       >×</button>
                       <span className="thumb-index">{i + 1}</span>
                     </div>
@@ -239,6 +250,8 @@ export default function App() {
                 type="range" min="20" max="80" value={confidence}
                 onChange={(e) => setConfidence(Number(e.target.value))}
                 className="conf-slider"
+                aria-label="Detection sensitivity"
+                style={{ "--value": `${((confidence - 20) / 60) * 100}%` }}
               />
               <div className="conf-labels">
                 <span>More detections</span>
